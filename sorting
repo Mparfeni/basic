@@ -1,0 +1,77 @@
+package coffeemachine;
+
+import java.io.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+public class PopularCoffee {
+    private String fileName;
+    private String titles;
+    public HashMap<String, Integer> coffeeStatistics;
+    public Map<String, Integer> sortedMap;
+   
+    public PopularCoffee(){
+        sortedMap = sortByValue(coffeeStatistics);
+        String basePath = System.getProperty("user.dir");
+        fileName = basePath + "/src/coffeemachine/CoffeeNames.txt";
+        titles = " " ;
+        coffeeStatistics = new HashMap<String, Integer>();
+    }
+    
+
+    public void writeFile(String coffeeName){
+        try {
+            FileOutputStream fw = new FileOutputStream(fileName, false);
+            ObjectOutputStream output = new ObjectOutputStream(fw);
+            int size = coffeeStatistics.size();
+            
+            Integer count = coffeeStatistics.get(coffeeName);
+            
+            if (count != null){
+                coffeeStatistics.put(coffeeName, count + 1);
+            } else {
+                coffeeStatistics.put(coffeeName, 1);
+            }
+            output.writeObject(coffeeStatistics);
+            output.close();
+        } catch (Exception e) {
+            System.out.println("I cannot create that file");
+        }
+    }
+    public void readFile() {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(fileName)));
+            coffeeStatistics = (HashMap<String, Integer>) ois.readObject();
+            System.out.println(coffeeStatistics.toString());
+        } catch (Exception e){
+             System.out.println("I cannot read that file");
+        }
+    }
+    
+    private static Map<String, Integer> sortByValue(Map<String, Integer> coffeeStatistics) {
+    List<Map.Entry<String, Integer>> list = new LinkedList<>(coffeeStatistics.entrySet());
+    Collections.sort(list, new Comparator<Map.Entry<String, Integer>>(){
+        public int compare(Map.Entry<String, Integer> o1,Map.Entry<String, Integer> o2) {
+            return (o1.getValue()).compareTo(o2.getValue());
+        }
+        });
+        Map<String, Integer> sortedMap = new LinkedHashMap<String, Integer>();
+        for (Map.Entry<String, Integer> entry :list){
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
+}
+    Map map = sortByValue(coffeeStatistics);
+    public <K, V> void printMap() {
+    for (Map. : map.entrySet()) {
+        System.out.println(entry.getKey() + " " + entry.getValue());
+        }
+ map.entrySet();
+}
+}
+
